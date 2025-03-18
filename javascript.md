@@ -5,9 +5,11 @@
 
 ### JS Terminal: [Playcode](https://playcode.io/empty_javascript)
 
+
 ### 0. Solve JS Issue
-<my-el></my-el>
-```js client
+
+<!-- begin snippet: js hide: false console: true babel: false -->
+<!-- language: lang-js -->
 var a = 20;
 console.log(a);
 console.log(a++);
@@ -15,7 +17,8 @@ console.log(a);
 console.log(++a);
 console.log(a+10);
 console.log(a);
-```
+<!-- end snippet -->
+
 <details>
     <summary><b>Answer</b></summary>
     <p>20<br>20<br>21<br>22<br>32<br>22</p>
