@@ -5,11 +5,30 @@
 
 ### JS Terminal: [Playcode](https://playcode.io/empty_javascript)
 
+```html preview-story
+
+  Hello world!
+  Click me!
+
+```
+
+<my-el></my-el>
+
+```js client
+import { LitElement, html } from 'https://unpkg.com/lit-element?module';
+
+class MyEl extends LitElement {
+  render() {
+    this.innerHTML = 'I am alive';
+  }
+}
+
+customElements.define('my-el', MyEl);
+```
 
 ### 0. Solve JS Issue
 
-<!-- begin snippet: js hide: false console: true babel: false -->
-<!-- language: lang-js -->
+```js
 var a = 20;
 console.log(a);
 console.log(a++);
@@ -17,12 +36,11 @@ console.log(a);
 console.log(++a);
 console.log(a+10);
 console.log(a);
-<!-- end snippet -->
-
+```
 <details>
     <summary><b>Answer</b></summary>
     <p>20<br>20<br>21<br>22<br>32<br>22</p>
-</details>
+</details><br>
 
 ```js
 console.log([] == "");
@@ -30,7 +48,7 @@ console.log([] == "");
 <details>
     <summary><b>Answer</b></summary>
     <p>false</p>
-</details>
+</details><br>
 
 ```js
 console.log(["abc"] == "abc");
@@ -38,7 +56,7 @@ console.log(["abc"] == "abc");
 <details>
     <summary><b>Answer</b></summary>
     <p>true</p>
-</details>
+</details><br>
 
 ```js
 console.log([1,2] + [3, 4]);
@@ -50,13 +68,31 @@ console.log(["abc", "ab"] == ["abc", "ab"]);
 console.log("12"/2, "12"/"2");
 ```
 
+## Difference between 'var', 'let', 'const'
+```java
+```
+
 
 // 1. Array map/filter/reduce 
 
 ```js
-const arr = ['1', '2', '3', '4', '5']; 
+const arr = ['1', '2', '3', '4', '5'];
+// Map, forEach, every
 console.log('1.a) Array Map - Convert to Number: ', arr.map(x => Number(x))); // [1, 2, 3, 4, 5]
+let sum = 0;
+arr.forEach(x => sum+=Number(x));
+console.log('Sum: ', sum);
 
+console.log('1. b) Array every - sum value: ', arr.every(x => Number(x)%1 == 0)); // true
+let sum1 = 0;
+arr.every(x => sum1+=Number(x))
+console.log('1. b) Array every - sum value: ', sum1); // 15
+
+
+// Some
+console.log('1. b) Array some - sum value: ', arr.some(x => Number(x)%3 === 0)  ); // true
+
+// Filter
 console.log('1.b) Array Filter - Even Element: ', arr.filter(x => Number(x)%2 === 0)); // ["2", "4"]
 console.log('1.b) Array Filter - Even Number: ', arr.filter(x => Number(x)%2 === 0).map(x => Number(x))); // [2, 4]
 console.log('1.b) Array Filter - Even Number: ', arr.filter(x => Number(x)%2 === 0).map(Number)); // [2, 4]
@@ -73,6 +109,135 @@ console.log('1.c) Array Reduce - Sum: ', arr.reduce((acc, ele) => acc + ele)); /
 // Print as: 012345
 console.log('1.c) Array Reduce - Sum: ', arr.reduce((acc, ele) => acc + ele, 0)); // 012345
 ```
+// Object Prototype
+```js
+const obj = {name: "biswa"};
+// Common methos of Object Prototype
+console.log(obj.toString()); // [object Object]
+console.log(obj.valueOf()); // (1) {name: "biswa"}
+console.log(obj.hasOwnProperty("name")); // true
+console.log(obj.hasOwnProperty("toString")); // false
+console.log(obj.propertyIsEnumerable("name")); // true
+console.log(obj.propertyIsEnumerable("toString")); // false
+```
+```js
+function Person() {
+  console.log("person instance created");
+}
+Person.prototype.name = "Biswa";
+Person.prototype.country = "India";
+
+let p1 = new Person();
+console.log(p1.name, p1.country);
+```
+```js
+// Function Prototype
+function Person(name, country) {
+  this.name = name;
+  this.country = country;
+  this.getCountry = function() {
+      return this.country;
+  }
+}
+
+let p1 = new Person("Sam", "USA");
+Person.prototype.age = 32;
+Person.prototype.showData = function() {
+    console.log("Person Info: ", this.name, this.country, this.age);
+}
+Person.prototype.getName = function() { 
+    return this.name;
+};
+
+p1.showData(); // Person Info:  Sam USA 32
+console.log(p1.getName()) // Sam
+
+console.log(
+    p1.hasOwnProperty("name"),       // true
+    p1.hasOwnProperty("country"),    // true
+    p1.hasOwnProperty("getCountry"), // true
+    p1.hasOwnProperty("age"),        // false
+    p1.hasOwnProperty("getName"),    // false
+)
+```
+```js
+function Person(name, country) {
+    this.name = name;
+    this.country = country;
+    this.getCountry = function() {
+        return this.country;
+    }
+  }
+  
+  let p1 = new Person("Sam", "USA");
+  p1.age = 32;
+  p1.showData = function() {
+      console.log("Person Info: ", this.name, this.country, this.age);
+  }
+  p1.getName = function() { 
+      return this.name;
+  };
+  
+  console.log(
+      p1.hasOwnProperty("name"),       // true
+      p1.hasOwnProperty("country"),    // true
+      p1.hasOwnProperty("getCountry"), // true
+      p1.hasOwnProperty("age"),        // true (Changed)
+      p1.hasOwnProperty("getName"),    // true (Changed)
+  )
+
+  So, Every function have a default object as prototype.
+  When we invoke params or function of function prototype (p.*), it's returning true
+```
+```js
+let arr = [ 1, 2];
+arr.hasOwnProperty("getSum") // false
+arr.getSum = arr.reduce((acc, x) => acc+x, 0);
+console.log(arr.__proto__); // [at: ƒ, concat: ƒ, copyWithin: ƒ, fill: ƒ, find: ƒ, …]
+arr.__proto__.hasOwnProperty("map") // true
+arr.hasOwnProperty("getSum") // true
+console.log(arr); // (2) [1, 2, getSum: 3]
+arr.length // 2
+arr.push(4);
+console.log(arr); // [1, 2, 4, getSum: 3]
+arr.length // 3
+```
+```js
+function fun() {
+}
+typeof (new fun()) // 'object'
+typeof(fun) // 'function'
+```
+```js
+Object Prototype
+person = {
+  name: "name",
+  country: "country",
+  getCountry: function() {
+      return this.country;
+  }
+}
+let p1 = person;
+person.age = 32;
+person.showData = function() {
+    console.log("Person Info: ", this.name, this.country, this.age);
+}
+person.getName = function() { 
+    return this.name;
+};
+
+console.log(
+    p1.hasOwnProperty("name"), // true
+    p1.hasOwnProperty("country"), // true
+    p1.hasOwnProperty("getCountry"), // true
+    p1.hasOwnProperty("age"), // true
+    p1.hasOwnProperty("getName"), // true
+)
+```
+
+arr = [1,2];
+Why arr.isPrototypeOf("map") = false and
+arr.hasOwnProperty("map") = false
 
 // 2. value vs. reference 
 ```js
@@ -234,4 +399,29 @@ Another way to do this:
     sleep(1000)
         .then(t => console.log('hello'));
     console.log('B');
+```
+
+
+```js
+const createCounter = () => { 
+    let count = 0; 
+    const increaseCount = () => { 
+        count++; 
+    }; 
+    return { 
+        increase:  increaseCount,// Method to increase count
+        getCount: () => count,     // Method to get the current count
+        reset: () => { count = 0; } // Method to reset the count
+    }; 
+};
+
+const counter = createCounter(); 
+counter.increase();
+console.log(counter.getCount())
+counter.increase();
+counter.increase();
+console.log(counter.getCount())
+
+counter.reset();
+console.log(counter.getCount())
 ```
